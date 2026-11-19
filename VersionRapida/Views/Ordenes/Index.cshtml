@@ -1,0 +1,45 @@
+﻿@model IEnumerable<TechFixPro.Models.OrdenServicio>
+
+<div class="container mt-4">
+    <h3 class="mb-3">TechFix Express Pro - Órdenes de Servicio</h3>
+
+    <div class="row mb-3">
+        <div class="col-6"><div class="alert alert-primary mb-0"><strong>Total Órdenes:</strong> @Model.Count()</div></div>
+        <div class="col-6"><div class="alert alert-success mb-0"><strong>Total Presupuestado:</strong> @Model.Sum(x => x.CostoEstimado).ToString("C0")</div></div>
+    </div>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>N° Orden</th>
+                <th>Cliente</th>
+                <th>Categoría</th>
+                <th>Técnico</th>
+                <th>Fecha</th>
+                <th>Costo</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                var color = item.Estado switch
+                {
+                    "Pendiente" => "bg-warning text-dark",
+                    "En Reparacion" => "bg-primary",
+                    "Listo" => "bg-success",
+                    _ => "bg-secondary"
+                };
+                <tr>
+                    <td>@item.NumeroOrden</td>
+                    <td>@item.NombreCliente (@item.TelefonoCliente)</td>
+                    <td>@item.Categoria?.Nombre</td>
+                    <td>@item.Tecnico?.NombreCompleto</td>
+                    <td>@item.FechaIngreso.ToString("dd/MM/yyyy")</td>
+                    <td>@item.CostoEstimado.ToString("C0")</td>
+                    <td><span class="badge @color">@item.Estado</span></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
